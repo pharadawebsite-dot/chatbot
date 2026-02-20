@@ -1,82 +1,158 @@
-// Pharada Modern Chatbot (Demo)
-(function() {
-  // Chat Button
-  var chatButton = document.createElement("button");
+// Pharada Modern Chatbot (Demo) - EQTech Jordan
+(function(){
+  // Load Font Awesome (for professional icons)
+  if(!document.getElementById("fa-kit")){
+    const fa = document.createElement("script");
+    fa.src = "https://kit.fontawesome.com/yourkitid.js"; // ضع هنا Kit ID الخاص بك من Font Awesome
+    fa.crossOrigin = "anonymous";
+    fa.id = "fa-kit";
+    document.head.appendChild(fa);
+  }
+
+  // --- Create Chat Button ---
+  const chatButton = document.createElement("button");
   chatButton.id = "chatButton";
-  chatButton.innerHTML = "💬";
+  chatButton.innerHTML = '<i class="fas fa-comment-alt"></i>'; // FontAwesome chat icon
   document.body.appendChild(chatButton);
 
-  // Chat Box
-  var chatBox = document.createElement("div");
+  // --- Create Chat Box ---
+  const chatBox = document.createElement("div");
   chatBox.id = "chatBox";
   chatBox.innerHTML = `
     <div id="chatHeader">Pharada Support (Demo)</div>
-    <div id="chatMessages">
-      <div class="bot-msg">👋 Hello! This is a demo chatbot.</div>
-    </div>
-    <div id="chatInput">
-      <input type="text" id="userMessage" placeholder="Type your message..." />
-      <button id="sendBtn">Send</button>
-    </div>
+    <div id="chatMessages"></div>
+    <div id="chatFooter">🚨 Demo only - working on backend (EQTech Jordan)</div>
   `;
   document.body.appendChild(chatBox);
 
-  // CSS
-  var style = document.createElement("style");
+  // --- Add CSS ---
+  const style = document.createElement("style");
   style.innerHTML = `
-    #chatButton { 
-      position: fixed; bottom: 20px; right: 20px;
-      background: linear-gradient(135deg, #0d47a1, #1976d2);
-      color: white; border: none; padding: 14px 18px; border-radius: 50px;
-      font-size: 24px; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-      z-index: 9999; transition: transform 0.3s;
+    #chatButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #7e53a0, #3f86cf);
+      color: white;
+      border: none;
+      padding: 18px 22px;
+      border-radius: 50px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      z-index: 9999;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    #chatButton:hover { transform: scale(1.1); }
-    #chatBox { position: fixed; bottom: 80px; right: 20px; width: 320px; height: 420px; 
-      background: white; border-radius: 12px; display: none; flex-direction: column;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3); font-family: Arial, sans-serif;
-      z-index: 9998; overflow: hidden;
+    #chatButton:hover {
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
-    #chatHeader { background: linear-gradient(135deg,#0d47a1,#1976d2); color:white;
-      padding:14px; font-weight:bold; text-align:center; font-size:16px; }
-    #chatMessages { flex:1; padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; }
-    .bot-msg{background:#e3f2fd;align-self:flex-start;padding:8px 12px;border-radius:12px; }
-    .user-msg{background:#1976d2;color:white;align-self:flex-end;padding:8px 12px;border-radius:12px; }
-    #chatInput{display:flex;border-top:1px solid #ddd;}
-    #chatInput input{flex:1;padding:10px;border:none;outline:none;font-size:14px;}
-    #chatInput button{background:#0d47a1;color:white;border:none;padding:10px 16px;cursor:pointer;}
-    #chatInput button:hover{background:#1976d2;}
+    #chatBox {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 350px;
+      height: 450px;
+      background: white;
+      border-radius: 15px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      font-family: 'Arial', sans-serif;
+      z-index: 9998;
+      overflow: hidden;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+    #chatHeader {
+      background: linear-gradient(135deg,#7e53a0,#3f86cf);
+      color:white;
+      padding:16px;
+      text-align:center;
+      font-weight:bold;
+      font-size:17px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    }
+    #chatMessages {
+      flex:1;
+      padding:12px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      font-size:14px;
+    }
+    .bot-msg, .user-msg {
+      padding:10px 14px;
+      border-radius:12px;
+      max-width:80%;
+      line-height:1.4;
+      word-wrap:break-word;
+      animation: slideIn 0.3s ease-out;
+    }
+    .bot-msg { background:#f0e6fa; align-self:flex-start; color:#333; }
+    .user-msg { background:#7e53a0; color:white; align-self:flex-end; }
+    @keyframes slideIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+    .option-btn {
+      padding:8px 14px;
+      background:#3f86cf;
+      color:white;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      margin-top:4px;
+      transition: background 0.3s, transform 0.2s;
+      font-size:13px;
+      text-align:left;
+    }
+    .option-btn:hover {
+      background:#7e53a0;
+      transform:scale(1.05);
+    }
+    #chatFooter {
+      padding:8px;
+      text-align:center;
+      font-size:12px;
+      color:red;
+      border-top:1px solid #ddd;
+      background:#fff0f0;
+    }
   `;
   document.head.appendChild(style);
 
-  // Toggle chat
-  chatButton.addEventListener("click", function() {
-    chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+  // --- Chat Logic ---
+  chatButton.addEventListener("click", ()=>{
+    chatBox.style.display = chatBox.style.display==="flex" ? "none" : "flex";
+    if(chatMessages.innerHTML.trim()==="") showOptions();
   });
 
-  // Message sending
-  function addMessage(content,sender){
-    var messages=document.getElementById("chatMessages");
-    var div=document.createElement("div");
-    div.className=sender==="bot"?"bot-msg":"user-msg";
-    div.innerHTML=content;
-    messages.appendChild(div);
-    messages.scrollTop=messages.scrollHeight;
+  function addMessage(content,sender="bot"){
+    const div=document.createElement("div");
+    div.className = sender==="bot"?"bot-msg":"user-msg";
+    div.innerHTML = content;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  document.getElementById("sendBtn").addEventListener("click", function(){
-    var input=document.getElementById("userMessage");
-    var msg=input.value.trim();
-    if(!msg) return;
-    addMessage(msg,"user");
-    setTimeout(function(){
-      addMessage("This is a demo reply from Pharada chatbot.","bot");
-    }, 800);
-    input.value="";
-  });
-
-  document.getElementById("userMessage").addEventListener("keypress",function(e){
-    if(e.key==="Enter") document.getElementById("sendBtn").click();
-  });
+  function showOptions(){
+    addMessage("<strong>Hi there! I'm Pharada Bot 🤖</strong><br>Select one of the options below:", "bot");
+    const options=[
+      {label:'<i class="fas fa-briefcase"></i> Services', reply:'Our demo services include Consulting, Web Development, Marketing.'},
+      {label:'<i class="fas fa-dollar-sign"></i> Pricing', reply:'Demo pricing info: check our Pricing page for details.'},
+      {label:'<i class="fas fa-phone-alt"></i> Contact Us', reply:'Reach us at contact@pharada.com or +123456789.'},
+      {label:'<i class="fas fa-question-circle"></i> FAQ', reply:'Check our FAQ section or ask here for more info.'}
+    ];
+    options.forEach(opt=>{
+      const btn=document.createElement("button");
+      btn.className="option-btn";
+      btn.innerHTML=opt.label;
+      btn.addEventListener("click", ()=>{
+        addMessage(opt.label,"user");
+        setTimeout(()=>addMessage(opt.reply,"bot"),500);
+      });
+      chatMessages.appendChild(btn);
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 
 })();
