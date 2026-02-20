@@ -1,4 +1,4 @@
-// Pharada Premium Chatbot v1.0 - EQTech Jordan (Demo)
+// Pharada Premium Chatbot v2.0 - EQTech Jordan (Demo + Persistent State)
 (function(){
 
   // Load Font Awesome for icons
@@ -10,13 +10,13 @@
     document.head.appendChild(fa);
   }
 
-  // --- Create Floating Chat Button ---
+  // --- Floating Chat Button ---
   const chatButton = document.createElement("button");
   chatButton.id = "chatButton";
   chatButton.innerHTML = '<i class="fas fa-comment-alt"></i>';
   document.body.appendChild(chatButton);
 
-  // --- Create Chat Box ---
+  // --- Chat Box ---
   const chatBox = document.createElement("div");
   chatBox.id = "chatBox";
   chatBox.innerHTML = `
@@ -28,13 +28,11 @@
     <div id="chatFooter">🚨 <strong>DEMO ONLY - WORKING ON BACKEND (EQTech Jordan)</strong></div>
   `;
   document.body.appendChild(chatBox);
-
   const chatMessages = chatBox.querySelector("#chatMessages");
 
   // --- Add CSS ---
   const style = document.createElement("style");
   style.innerHTML = `
-    /* Floating Button */
     #chatButton {
       position: fixed;
       bottom: 20px;
@@ -52,12 +50,11 @@
     }
     #chatButton:hover { transform: scale(1.1); box-shadow:0 8px 25px rgba(0,0,0,0.4); }
 
-    /* Chat Box */
     #chatBox {
       position: fixed;
       bottom: 80px;
       right: 20px;
-      width: 300px; /* عرض أصغر من الجوانب */
+      width: 300px;
       height: 440px;
       background:#fefefe;
       border-radius:15px;
@@ -172,18 +169,35 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Show chatbot automatically
-  chatBox.style.display="flex";
-  showOptions();
+  // --- Persistent State with LocalStorage ---
+  const stateKey = "pharadaChatClosed";
+  function isClosed(){ return localStorage.getItem(stateKey) === "true"; }
 
-  // Toggle with floating button
-  chatButton.addEventListener("click", ()=>{
-    chatBox.style.display = chatBox.style.display==="flex"?"none":"flex";
-  });
+  function setClosed(value){ localStorage.setItem(stateKey, value?"true":"false"); }
 
-  // Close button
-  chatBox.querySelector("#chatClose").addEventListener("click", ()=>{
+  function openChat(){
+    chatBox.style.display = "flex";
+    setClosed(false);
+    if(chatMessages.innerHTML.trim() === "") showOptions();
+  }
+
+  function closeChat(){
+    chatBox.style.display = "none";
+    setClosed(true);
+  }
+
+  // Load chat state
+  if(isClosed()){
     chatBox.style.display="none";
+  } else {
+    openChat();
+  }
+
+  // --- Button Events ---
+  chatButton.addEventListener("click", ()=>{
+    if(chatBox.style.display==="flex") closeChat();
+    else openChat();
   });
+  chatBox.querySelector("#chatClose").addEventListener("click", closeChat);
 
 })();
