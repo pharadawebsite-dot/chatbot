@@ -31,8 +31,7 @@
       <button id="home">⌂</button>
     </div>
   `;
-  document.body.appendChild(box);
-
+document.documentElement.appendChild(box);
   const messages = box.querySelector("#messages");
   const typing = box.querySelector("#typing");
 
@@ -136,6 +135,8 @@ style.innerHTML = `
   overflow:hidden;
   animation:fadeInUp .3s ease;
   z-index:2147483647 !important; /* 🔥 أعلى قيمة */  
+    transform: none !important;
+  filter: none !important;
 }
 
 /* ===== Header ===== */
