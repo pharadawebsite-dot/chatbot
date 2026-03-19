@@ -122,7 +122,7 @@ style.innerHTML = `
 
 /* ===== Chat Box ===== */
 #pharadaBox{
-  position:fixed;
+  position: fixed !important;
   bottom:85px;
   right:20px;
   width:340px;
@@ -135,6 +135,7 @@ style.innerHTML = `
   font-family:system-ui;
   overflow:hidden;
   animation:fadeInUp .3s ease;
+  z-index:2147483647 !important; /* 🔥 أعلى قيمة */  
 }
 
 /* ===== Header ===== */
